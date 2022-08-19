@@ -89,7 +89,7 @@ Tab5:AddTextbox({
 Tab5:AddSlider({
 	Name = "Spam Time",
 	Min = 0,
-	Max = 5,
+	Max = 30,
 	Default = 0.5,
 	Color = Color3.fromRGB(183, 0, 255),
 	Increment = .01,
