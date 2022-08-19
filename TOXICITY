@@ -98,3 +98,13 @@ Tab5:AddSlider({
 		messageWait = Value
 	end    
 })
+Tab5:AddButton({
+	Name = "Fix Mouse",
+	Callback = function()
+		pcall(function()
+		    game:GetService("UserInputService").MouseIconEnabled = true
+		    game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
+		    plr.PlayerGui.MouseGui:Destroy()  
+        	end)	
+  	end    
+})
