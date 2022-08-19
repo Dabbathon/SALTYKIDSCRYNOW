@@ -1,0 +1,100 @@
+getgenv().spamToggle = false
+local messageSpammed,messageWait,messageCount= {}
+local curMessageCount = 0
+local plr = game:GetService("Players").LocalPlayer
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local function spamChat()
+    while spamToggle do
+        for i,v in pairs(messageSpammed) do
+            local args = {
+                [1] = v,
+                [2] = "All"
+            }
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))
+            if messageWait == 0 then
+                wait()
+            else
+                wait(messageWait)
+            end
+        end
+        wait(1/workspace:GetRealPhysicsFPS())
+    end
+end
+local Window = OrionLib:MakeWindow({Name = "Tatakai V DOGSHIT", HidePremium = true}) -- gui creation
+local Tab5 = Window:MakeTab({
+	Name = "Chat/Toxic Spam",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+Tab5:AddToggle({
+	Name = "Auto Spam",
+	Default = false,
+	Callback = function(Value)
+        spamToggle = Value
+        spamChat()
+    end
+})
+Tab5:AddTextbox({
+	Name = "Spammed Message",
+	Default = "",
+	TextDisappear = true,
+	Callback = function(Value)
+        if not (#messageSpammed >= messageCount) then
+            curMessageCount += 1
+            OrionLib:MakeNotification({
+                Name = "Current part",
+                Content = tostring(curMessageCount),
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+            table.insert(messageSpammed,Value)
+        else
+            OrionLib:MakeNotification({
+                Name = "ROFL",
+                Content = "yo messages got fucking deleted back to 0",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+            curMessageCount = 0
+            messageSpammed = {}
+        end
+	end	  
+})
+Tab5:AddTextbox({
+	Name = "Number of Parts in Message",
+	Default = tonumber(1),
+	TextDisappear = false,
+	Callback = function(Value)
+        messageCount = tonumber(Value)
+        if messageCount == nil then
+            OrionLib:MakeNotification({
+                Name = "That's not a fucking number",
+                Content = "how could you be so fucking dumb that you put in literally anything but a number",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+        if messageSpammed ~= nil and messageCount >= #messageSpammed then
+            OrionLib:MakeNotification({
+                Name = "ROFL",
+                Content = "yo messages got fucking deleted back to 0",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+            messageSpammed = {}
+            curMessageCount = 0
+        end
+	end	  
+})
+Tab5:AddSlider({
+	Name = "Spam Time",
+	Min = 0,
+	Max = 5,
+	Default = 0.5,
+	Color = Color3.fromRGB(183, 0, 255),
+	Increment = .01,
+	ValueName = "Seconds",
+	Callback = function(Value)
+		messageWait = Value
+	end    
+})
