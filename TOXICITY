@@ -35,28 +35,28 @@ Tab5:AddToggle({
     end
 })
 Tab5:AddTextbox({
-	Name = "Spammed Message",
-	Default = "",
-	TextDisappear = true,
+	Name = "Number of Parts in Message",
+	Default = tonumber(1),
+	TextDisappear = false,
 	Callback = function(Value)
-        if not (#messageSpammed >= messageCount) then
-            curMessageCount += 1
+        messageCount = tonumber(Value)
+        if messageCount == nil then
             OrionLib:MakeNotification({
-                Name = "Current part",
-                Content = tostring(curMessageCount),
+                Name = "That's not a fucking number",
+                Content = "how could you be so fucking dumb that you put in literally anything but a number",
                 Image = "rbxassetid://4483345998",
                 Time = 5
             })
-            table.insert(messageSpammed,Value)
-        else
+        end
+        if messageSpammed ~= nil and messageCount >= #messageSpammed then
             OrionLib:MakeNotification({
                 Name = "ROFL",
                 Content = "yo messages got fucking deleted back to 0",
                 Image = "rbxassetid://4483345998",
                 Time = 3
             })
-            curMessageCount = 0
             messageSpammed = {}
+            curMessageCount = 0
         end
 	end	  
 })
